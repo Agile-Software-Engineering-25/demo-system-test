@@ -1,9 +1,11 @@
 package com.ase.demo.base;
 
 import com.microsoft.playwright.*;
+import io.qameta.allure.Allure;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,29 +21,35 @@ public class TestBase {
     protected static final String UPLOADS_DIR = System.getProperty("user.dir") + "/src/test/resources/uploads";
 
     @BeforeEach
-    void setup() {
-        // Create directories if they don't exist
+    public void setup() {
         createDirectoryIfNotExists(DOWNLOADS_DIR);
         createDirectoryIfNotExists(UPLOADS_DIR);
 
         playwright = Playwright.create();
         browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
-                .setHeadless(false)
-                .setSlowMo(1000)); // Slow down for demo purposes
+                .setHeadless(false));
 
         context = browser.newContext(new Browser.NewContextOptions()
                 .setViewportSize(1280, 720)
-                .setAcceptDownloads(true)); // Enable downloads
+                .setAcceptDownloads(true));
 
         page = context.newPage();
     }
 
     @AfterEach
-    void teardown() {
-        if (page != null) page.close();
-        if (context != null) context.close();
-        if (browser != null) browser.close();
-        if (playwright != null) playwright.close();
+    public void teardown() {
+        try {
+            // Take screenshot on failure and attach to Allure
+            if (page != null) {
+                byte[] screenshot = page.screenshot();
+                Allure.addAttachment("Screenshot", new ByteArrayInputStream(screenshot));
+            }
+        } finally {
+            if (page != null) page.close();
+            if (context != null) context.close();
+            if (browser != null) browser.close();
+            if (playwright != null) playwright.close();
+        }
     }
 
     protected void navigateToPath(String path) {
@@ -56,18 +64,11 @@ public class TestBase {
         return Paths.get(UPLOADS_DIR);
     }
 
-    protected Path getDownloadPath() {
-        return Paths.get(DOWNLOADS_DIR);
-    }
-
-    protected Path getUploadPath() {
-        return Paths.get(UPLOADS_DIR);
-    }
-
     private void createDirectoryIfNotExists(String dirPath) {
         File directory = new File(dirPath);
-        if (!directory.exists()) {
-            directory.mkdirs();
+        if (directory.exists()) {
+            return;
         }
+        directory.mkdirs();
     }
 }
