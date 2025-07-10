@@ -5,45 +5,61 @@ import com.ase.demo.pages.LoginPage;
 import com.ase.demo.pages.SecureAreaPage;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static io.qameta.allure.Allure.step;
 
 public class LoginTest extends TestBase {
 
     @Test
     @Tag("smoke")
     void testSuccessfulLogin() {
-        navigateToPath("/login");
+        step("Navigate to Login Page", () -> navigateToPath("/login"));
 
-        LoginPage loginPage = new LoginPage(page);
-        loginPage.login("tomsmith", "SuperSecretPassword!");
+        step("Login with valid credentials", () -> {
+            LoginPage loginPage = new LoginPage(page);
+            loginPage.login("tomsmith", "SuperSecretPassword!");
+        });
 
-        SecureAreaPage secureArea = new SecureAreaPage(page);
-        assertThat(secureArea.getSuccessMessage())
-                .contains("You logged into a secure area!");
-        assertThat(secureArea.isLogoutButtonVisible()).isTrue();
+        step("Verify successful login message and logout button", () -> {
+            SecureAreaPage secureAreaPage = new SecureAreaPage(page);
+            assertThat(secureAreaPage.getSuccessMessage())
+                    .contains("You logged into a secure area!");
+            assertThat(secureAreaPage.isLogoutButtonVisible()).isTrue();
+        });
     }
 
     @Test
     void testInvalidLogin() {
-        navigateToPath("/login");
+        step("Navigate to Login Page", () -> navigateToPath("/login"));
 
-        LoginPage loginPage = new LoginPage(page);
-        loginPage.login("invaliduser", "invalidpass");
+        step("Attempt login with invalid credentials", () -> {
+            LoginPage loginPage = new LoginPage(page);
+            loginPage.login("invalid-user", "invalid-pass");
+        });
 
-        assertThat(loginPage.isErrorDisplayed()).isTrue();
-        assertThat(loginPage.getErrorMessage())
-                .contains("Your username is invalid!");
+        step("Verify error message for invalid login", () -> {
+            LoginPage loginPage = new LoginPage(page);
+            assertThat(loginPage.isErrorDisplayed()).isTrue();
+            assertThat(loginPage.getErrorMessage())
+                    .contains("Your username is invalid!");
+        });
     }
 
     @Test
     void testEmptyCredentials() {
-        navigateToPath("/login");
+        step("Navigate to Login Page", () -> navigateToPath("/login"));
 
-        LoginPage loginPage = new LoginPage(page);
-        loginPage.clickLogin();
+        step("Click login without entering credentials", () -> {
+            LoginPage loginPage = new LoginPage(page);
+            loginPage.clickLogin();
+        });
 
-        assertThat(loginPage.isErrorDisplayed()).isTrue();
-        assertThat(loginPage.getErrorMessage())
-                .contains("Your username is invalid!");
+        step("Verify error message for empty credentials", () -> {
+            LoginPage loginPage = new LoginPage(page);
+            assertThat(loginPage.isErrorDisplayed()).isTrue();
+            assertThat(loginPage.getErrorMessage())
+                    .contains("Your username is invalid!");
+        });
     }
 }

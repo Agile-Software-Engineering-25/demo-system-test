@@ -5,94 +5,99 @@ import com.ase.demo.pages.FileDownloadPage;
 import com.microsoft.playwright.Download;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+
+import static io.qameta.allure.Allure.step;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileDownloadTest extends TestBase {
 
     @Test
     @Tag("smoke")
     void testViewAvailableDownloads() {
-        navigateToPath("/download");
+        step("Navigate to /download", () -> navigateToPath("/download"));
 
-        FileDownloadPage downloadPage = new FileDownloadPage(page);
+        FileDownloadPage downloadPage = step("Initialize FileDownloadPage", () -> new FileDownloadPage(page));
 
-        assertThat(downloadPage.isDownloadLinksVisible()).isTrue();
-        assertThat(downloadPage.getDownloadLinksCount()).isGreaterThan(0);
+        step("Check if download links are visible", () ->
+                assertThat(downloadPage.isDownloadLinksVisible()).isTrue());
 
-        List<String> availableFiles = downloadPage.getAvailableFiles();
-        assertThat(availableFiles).isNotEmpty();
+        step("Check that there are available download links", () ->
+                assertThat(downloadPage.getDownloadLinksCount()).isGreaterThan(0));
+
+        List<String> availableFiles = step("Get available file names", downloadPage::getAvailableFiles);
+
+        step("Verify available files list is not empty", () ->
+                assertThat(availableFiles).isNotEmpty());
     }
 
     @Test
-    void testDownloadByIndex() throws IOException {
-        navigateToPath("/download");
-
+    void testDownloadByIndex() {
+        step("Navigate to /download", () -> navigateToPath("/download"));
         FileDownloadPage downloadPage = new FileDownloadPage(page);
 
         if (downloadPage.getDownloadLinksCount() > 0) {
-            Download download = downloadPage.downloadFileByIndex(0);
+            Download download = step("Download first file by index", () ->
+                    downloadPage.downloadFileByIndex(0));
 
             assertThat(download).isNotNull();
             String fileName = download.suggestedFilename();
 
-            // Save to downloads directory
             Path downloadPath = getDownloadsPath().resolve(fileName);
-            download.saveAs(downloadPath);
 
-            // Verify download
-            assertThat(Files.exists(downloadPath)).isTrue();
+            step("Save file to: " + downloadPath, () -> download.saveAs(downloadPath));
 
-            // Clean up
-            Files.deleteIfExists(downloadPath);
+            step("Verify file exists at download path", () ->
+                    assertThat(Files.exists(downloadPath)).isTrue());
+
+            step("Clean up downloaded file", () -> Files.deleteIfExists(downloadPath));
         }
     }
 
     @Test
-    void testMultipleDownloads() throws IOException {
-        navigateToPath("/download");
-
+    void testMultipleDownloads() {
+        step("Navigate to /download", () -> navigateToPath("/download"));
         FileDownloadPage downloadPage = new FileDownloadPage(page);
-        List<String> availableFiles = downloadPage.getAvailableFiles();
 
-        // Download first 3 files (or all if less than 3)
+        List<String> availableFiles = downloadPage.getAvailableFiles();
         int downloadCount = Math.min(3, availableFiles.size());
 
         for (int i = 0; i < downloadCount; i++) {
-            String fileName = availableFiles.get(i);
-            Download download = downloadPage.downloadFile(fileName);
+            final int index = i;
+            step("Downloading file: " + availableFiles.get(index), () -> {
+                String fileName = availableFiles.get(index);
+                Download download = downloadPage.downloadFile(fileName);
+                Path downloadPath = getDownloadsPath().resolve(fileName);
 
-            Path downloadPath = getDownloadsPath().resolve(fileName);
-            download.saveAs(downloadPath);
+                download.saveAs(downloadPath);
+                assertThat(Files.exists(downloadPath)).isTrue();
 
-            assertThat(Files.exists(downloadPath)).isTrue();
-
-            // Clean up
-            Files.deleteIfExists(downloadPath);
+                Files.deleteIfExists(downloadPath);
+            });
         }
     }
 
     @Test
     void testDownloadFileInfo() {
-        navigateToPath("/download");
-
+        step("Navigate to /download", () -> navigateToPath("/download"));
         FileDownloadPage downloadPage = new FileDownloadPage(page);
         List<String> availableFiles = downloadPage.getAvailableFiles();
 
         if (!availableFiles.isEmpty()) {
             String firstFileName = availableFiles.getFirst();
-            Download download = downloadPage.downloadFile(firstFileName);
+            Download download = step("Start download for: " + firstFileName, () ->
+                    downloadPage.downloadFile(firstFileName));
 
-            // Test download properties
-            assertThat(download.url()).contains("download");
-            assertThat(download.suggestedFilename()).isNotEmpty();
+            step("Check download URL contains 'download'", () ->
+                    assertThat(download.url()).contains("download"));
 
-            // Cancel download (don't actually save)
-            download.cancel();
+            step("Check suggested filename is not empty", () ->
+                    assertThat(download.suggestedFilename()).isNotEmpty());
+
+            step("Cancel the download (simulate abort)", download::cancel);
         }
     }
 }
