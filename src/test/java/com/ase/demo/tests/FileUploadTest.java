@@ -4,6 +4,7 @@ package com.ase.demo.tests;
 import com.ase.demo.base.TestBase;
 import com.ase.demo.pages.FileUploadPage;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +24,7 @@ public class FileUploadTest extends TestBase {
     }
 
     @Test
+    @Tag("smoke")
     void testSingleFileUpload() {
         navigateToPath("/upload");
 
@@ -44,30 +46,6 @@ public class FileUploadTest extends TestBase {
         String selectedFile = uploadPage.getSelectedFileName();
         assertThat(selectedFile).contains("test-upload.txt");
         assertThat(uploadPage.isFileUploaded()).isFalse();
-    }
-
-    @Test
-    void testMultipleFileUpload() throws IOException {
-        // Create additional test files
-        Path testFile2 = getUploadsPath().resolve("test-upload-2.txt");
-        Path testFile3 = getUploadsPath().resolve("test-upload-3.txt");
-
-        Files.write(testFile2, "Second test file".getBytes());
-        Files.write(testFile3, "Third test file".getBytes());
-
-        navigateToPath("/upload");
-
-        FileUploadPage uploadPage = new FileUploadPage(page);
-
-        // Note: the-internet.herokuapp.com upload page only supports single file
-        // This test demonstrates the method for multiple files
-        Path[] files = {testFile, testFile2, testFile3};
-        uploadPage.selectMultipleFiles(files);
-        uploadPage.clickUpload();
-
-        // Clean up additional files
-        Files.deleteIfExists(testFile2);
-        Files.deleteIfExists(testFile3);
     }
 
     @Test

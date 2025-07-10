@@ -3,12 +3,14 @@ package com.ase.demo.tests;
 import com.ase.demo.base.TestBase;
 import com.ase.demo.pages.LoginPage;
 import com.ase.demo.pages.SecureAreaPage;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginTest extends TestBase {
 
     @Test
+    @Tag("smoke")
     void testSuccessfulLogin() {
         navigateToPath("/login");
 
