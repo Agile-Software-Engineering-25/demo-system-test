@@ -53,6 +53,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./gh-pages
+          publish_dir: ./gh-pages/smoke
           destination_dir: smoke
           keep_files: true  # Do not delete full reports
