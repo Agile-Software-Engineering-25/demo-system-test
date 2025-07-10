@@ -3,6 +3,7 @@ package com.ase.demo.tests;
 import com.ase.demo.base.TestBase;
 import com.ase.demo.pages.FileDownloadPage;
 import com.microsoft.playwright.Download;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class FileDownloadTest extends TestBase {
 
     @Test
+    @Tag("smoke")
     void testViewAvailableDownloads() {
         navigateToPath("/download");
 
@@ -24,38 +26,6 @@ public class FileDownloadTest extends TestBase {
 
         List<String> availableFiles = downloadPage.getAvailableFiles();
         assertThat(availableFiles).isNotEmpty();
-
-        // Print available files for debugging (optional)
-        System.out.println("Available files for download:");
-        availableFiles.forEach(System.out::println);
-    }
-
-    @Test
-    void testDownloadFirstFile() throws IOException {
-        navigateToPath("/download");
-
-        FileDownloadPage downloadPage = new FileDownloadPage(page);
-        List<String> availableFiles = downloadPage.getAvailableFiles();
-
-        if (!availableFiles.isEmpty()) {
-            String firstFileName = availableFiles.get(0);
-            Download download = downloadPage.downloadFile(firstFileName);
-
-            // Verify download started
-            assertThat(download).isNotNull();
-            assertThat(download.suggestedFilename()).isEqualTo(firstFileName);
-
-            // Save the downloaded file
-            Path downloadPath = getDownloadsPath().resolve(firstFileName);
-            download.saveAs(downloadPath);
-
-            // Verify file was downloaded and saved
-            assertThat(Files.exists(downloadPath)).isTrue();
-            assertThat(Files.size(downloadPath)).isGreaterThan(0);
-
-            // Clean up
-            Files.deleteIfExists(downloadPath);
-        }
     }
 
     @Test
@@ -114,7 +84,7 @@ public class FileDownloadTest extends TestBase {
         List<String> availableFiles = downloadPage.getAvailableFiles();
 
         if (!availableFiles.isEmpty()) {
-            String firstFileName = availableFiles.get(0);
+            String firstFileName = availableFiles.getFirst();
             Download download = downloadPage.downloadFile(firstFileName);
 
             // Test download properties
