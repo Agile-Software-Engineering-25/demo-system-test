@@ -1,0 +1,4 @@
+com\ase\demo\tests\LoginTest.class
+com\ase\demo\tests\FileDownloadTest.class
+com\ase\demo\tests\FileUploadTest.class
+com\ase\demo\base\TestBase.class
