@@ -1,0 +1,4 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Thu Jul 10 21:59:41 UTC 2025","Thu Jul 10 21:59:42 UTC 2025","919","","com.ase.demo.tests.FileDownloadTest","","com.ase.demo.tests.FileDownloadTest","testViewAvailableDownloads","testViewAvailableDownloads()",""
+"passed","Thu Jul 10 21:59:40 UTC 2025","Thu Jul 10 21:59:41 UTC 2025","1123","","com.ase.demo.tests.LoginTest","","com.ase.demo.tests.LoginTest","testSuccessfulLogin","testSuccessfulLogin()",""
+"passed","Thu Jul 10 21:59:35 UTC 2025","Thu Jul 10 21:59:40 UTC 2025","5438","","com.ase.demo.tests.FileUploadTest","","com.ase.demo.tests.FileUploadTest","testSingleFileUpload","testSingleFileUpload()",""
