@@ -1,8 +1,9 @@
 name: Smoke Test
 
 on:
-  schedule:
-    - cron: '0 6 * * *' # daily at 06:00 UTC
+  pull_request:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
