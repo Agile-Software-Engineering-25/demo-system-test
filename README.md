@@ -3,7 +3,7 @@
 [![Smoke Tests Execution](https://github.com/Agile-Software-Engineering-25/demo-system-test/actions/workflows/smoke_test.yml/badge.svg)](https://github.com/Agile-Software-Engineering-25/demo-system-test/actions/workflows/smoke_test.yml)
 [![Full Tests Execution](https://github.com/Agile-Software-Engineering-25/demo-system-test/actions/workflows/full_test.yml/badge.svg)](https://github.com/Agile-Software-Engineering-25/demo-system-test/actions/workflows/full_test.yml)
 
-This is a **demo project** that showcases **best practices** for system testing using [Microsoft Playwright](https://playwright.dev/java/) in **Java** with **JUnit 5**, **Allure Reports**, and **GitHub Actions**. Created for a university course.
+This is a **demo project** that showcases **best practices** for system testing using [Microsoft Playwright](https://playwright.dev/java/) in **Java** with **JUnit 5**, **Allure Reports**, and **GitHub Actions**. Created for a university course. Find other related repos [here](https://github.com/orgs/Agile-Software-Engineering-25/repositories) or visit top level [documentation](https://agile-software-engineering-25.github.io/documentation/).
 
 ---
 
