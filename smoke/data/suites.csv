@@ -1,4 +1,4 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Fri Jul 11 22:15:16 UTC 2025","Fri Jul 11 22:15:17 UTC 2025","844","","com.ase.demo.tests.LoginTest","","com.ase.demo.tests.LoginTest","testSuccessfulLogin","testSuccessfulLogin()",""
-"passed","Fri Jul 11 22:15:15 UTC 2025","Fri Jul 11 22:15:16 UTC 2025","845","","com.ase.demo.tests.FileUploadTest","","com.ase.demo.tests.FileUploadTest","testSingleFileUpload","testSingleFileUpload()",""
-"passed","Fri Jul 11 22:15:13 UTC 2025","Fri Jul 11 22:15:15 UTC 2025","2372","","com.ase.demo.tests.FileDownloadTest","","com.ase.demo.tests.FileDownloadTest","testViewAvailableDownloads","testViewAvailableDownloads()",""
+"passed","Fri Jul 11 22:20:00 UTC 2025","Fri Jul 11 22:20:01 UTC 2025","742","","com.ase.demo.tests.FileDownloadTest","","com.ase.demo.tests.FileDownloadTest","testViewAvailableDownloads","testViewAvailableDownloads()",""
+"passed","Fri Jul 11 22:19:59 UTC 2025","Fri Jul 11 22:20:00 UTC 2025","857","","com.ase.demo.tests.LoginTest","","com.ase.demo.tests.LoginTest","testSuccessfulLogin","testSuccessfulLogin()",""
+"passed","Fri Jul 11 22:19:55 UTC 2025","Fri Jul 11 22:19:59 UTC 2025","4230","","com.ase.demo.tests.FileUploadTest","","com.ase.demo.tests.FileUploadTest","testSingleFileUpload","testSingleFileUpload()",""
